@@ -71,9 +71,8 @@ fun cefEvent(e: EventType) =
         EventType.DELETE -> CefMessageEvent.DELETE
     }
 
-private val fnrStringRegex = Regex("\"(\\d{4})\\d{7}\"")
+val fnrStringRegex = Regex("\\d{11}") // Regex to match exactly 11 digits
 
-fun vaskFnr(message: String?) =
-    message?.replace(fnrStringRegex) { transform: MatchResult ->
-        "\"${transform.groups.get(1)?.value ?: "****"}*******\""
-    } ?: ""
+fun vaskFnr(message: String?): String {
+    return message?.replace(fnrStringRegex, "[fnr]") ?: ""
+}

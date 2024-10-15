@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should contain`
+import org.amshove.kluent.`should not contain`
 import org.junit.jupiter.api.Test
 import java.net.URI
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class JsonDeserialiseringTest {
     val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -49,7 +49,7 @@ class JsonDeserialiseringTest {
                 "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        assertEquals(auditEntry, mapper.readValue<AuditEntry>(jsonMelding))
+        auditEntry `should be equal to`  mapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
@@ -82,20 +82,13 @@ class JsonDeserialiseringTest {
                 "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        assertEquals(auditEntry, mapper.readValue<AuditEntry>(jsonMelding))
+        auditEntry `should be equal to`  mapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
     fun `test vask av fnr i feilmeldinger`() {
-        val testFnr = "16120101181"
-        try {
-            mapper.readValue<AuditEntry>(
-                """ {"deltakerFnr": "$testFnr"} """,
-            )
-            assertFalse("Deserialisering burde feile") { true }
-        } catch (e: Exception) {
-            assertFalse("Vasket feilmelding burde ikke inneholde fnr") { vaskFnr(e.message).contains(testFnr) }
-            assertTrue("Vasket feilmelding inneholder maskert fnr") { vaskFnr(e.message).contains("\"1612*******\"") }
-        }
+        val feilmeldingMedFnr = "Det gikk galt et sted med fnr: 16120101181"
+        vaskFnr(feilmeldingMedFnr) `should not contain` feilmeldingMedFnr
+        vaskFnr(feilmeldingMedFnr) `should contain` "[fnr]"
     }
 }

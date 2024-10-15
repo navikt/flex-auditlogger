@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+
 plugins {
     id("java")
     id("maven-publish")
@@ -20,6 +22,7 @@ repositories {
 val ktorVersion = "3.0.0"
 val jacksonVersion = "2.18.0"
 val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
+val kluentVersion = "1.73"
 
 dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
@@ -30,8 +33,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("no.nav.common:audit-log:$auditLogVersion")
+
     testImplementation("ch.qos.logback:logback-classic:1.5.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.0.21")
+    testImplementation("org.amshove.kluent:kluent:$kluentVersion")
 }
 
 group = "no.nav.helse.flex"
@@ -70,5 +75,25 @@ publishing {
             }
             from(components["java"])
         }
+    }
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
+        testLogging {
+            events("PASSED", "FAILED", "SKIPPED")
+            exceptionFormat = FULL
+        }
+        failFast = false
+        reports.html.required.set(false)
+        reports.junitXml.required.set(false)
+        maxParallelForks =
+            if (System.getenv("CI") == "true") {
+                (Runtime.getRuntime().availableProcessors() - 1).coerceAtLeast(1).coerceAtMost(4)
+            } else {
+                2
+            }
     }
 }
