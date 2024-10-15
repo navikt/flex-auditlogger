@@ -1,4 +1,4 @@
-package no.nav.tema_tiltak.tiltak_auditlogger.kafka
+package no.nav.flex.flex_auditlogger.kafka
 
 
 enum class EventType {

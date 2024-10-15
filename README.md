@@ -1,6 +1,6 @@
-# tiltak-auditlogger
-Applikasjon for konsumering av audit-hendelser som oppstår i tiltaksgjennomforing-api og tiltak-refusjon-api, som videresendes til ArcSight for tilsynskontroll.
+# flex-auditlogger
+Applikasjon for konsumering av audit-hendelser som oppstår i flex sine apper, som videresendes til ArcSight for tilsynskontroll.
 
-Eies av Team Tiltak.
+Eies av Team Flex.
 <br/>
-Kontakt slack: #arbeidsgiver-tiltak
+Kontakt slack: #flex

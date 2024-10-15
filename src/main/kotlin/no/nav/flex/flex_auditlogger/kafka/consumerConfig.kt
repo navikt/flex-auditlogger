@@ -1,4 +1,4 @@
-package no.nav.tema_tiltak.tiltak_auditlogger.kafka
+package no.nav.flex.flex_auditlogger.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -8,7 +8,7 @@ import java.util.*
 
 fun consumerConfig() = Properties().apply {
     put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1)
-    put(ConsumerConfig.GROUP_ID_CONFIG, "tiltak-auditlogger")
+    put(ConsumerConfig.GROUP_ID_CONFIG, "flex-auditlogger")
     put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false)
     put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
     put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)

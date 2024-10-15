@@ -1,4 +1,4 @@
-package no.nav.tema_tiltak.tiltak_auditlogger.kafka
+package no.nav.flex.flex_auditlogger.kafka
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -11,7 +11,7 @@ import no.nav.common.audit_log.cef.CefMessageEvent
 import no.nav.common.audit_log.cef.CefMessageSeverity
 import no.nav.common.audit_log.log.AuditLogger
 import no.nav.common.audit_log.log.AuditLoggerImpl
-import no.nav.tema_tiltak.tiltak_auditlogger.utils.log
+import no.nav.flex.flex_auditlogger.utils.log
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import java.time.Duration
@@ -35,7 +35,7 @@ class AuditHendelseConsumer(
                     val melding: AuditEntry = mapper.readValue(it.value())
 
                     val cefMessage = CefMessage.builder()
-                        .applicationName("Tiltaksgjennomforing")
+                        .applicationName("Flex")
                         .loggerName(melding.appNavn)
                         .event(cefEvent(melding.eventType))
                         .name("Sporingslogg")
