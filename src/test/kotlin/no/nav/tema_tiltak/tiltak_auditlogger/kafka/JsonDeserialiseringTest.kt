@@ -1,4 +1,4 @@
-package no.nav.flex.flex_auditlogger.kafka
+package no.nav.flex.auditlogger.kafka
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

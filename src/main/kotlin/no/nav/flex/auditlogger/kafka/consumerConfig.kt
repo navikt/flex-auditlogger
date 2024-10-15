@@ -1,4 +1,4 @@
-package no.nav.flex.flex_auditlogger.kafka
+package no.nav.flex.auditlogger.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig

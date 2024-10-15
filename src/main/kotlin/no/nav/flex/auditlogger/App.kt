@@ -1,14 +1,13 @@
-package no.nav.flex.flex_auditlogger
+package no.nav.flex.auditlogger
 
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import mu.KotlinLogging
-import no.nav.flex.flex_auditlogger.kafka.AuditHendelseConsumer
-import no.nav.flex.flex_auditlogger.kafka.consumerConfig
+import no.nav.flex.auditlogger.kafka.AuditHendelseConsumer
+import no.nav.flex.auditlogger.kafka.consumerConfig
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.io.Closeable

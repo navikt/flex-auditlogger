@@ -1,4 +1,4 @@
-package no.nav.flex.flex_auditlogger.utils
+package no.nav.flex.auditlogger.utils
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

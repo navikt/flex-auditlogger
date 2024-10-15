@@ -1,4 +1,4 @@
-package no.nav.flex.flex_auditlogger.kafka
+package no.nav.flex.auditlogger.kafka
 
 import java.net.URI
 import java.time.Instant
