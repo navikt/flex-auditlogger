@@ -35,18 +35,19 @@ class JsonDeserialiseringTest {
              "correlationId":"b9594bd4-58cb-4ec0-99ec-a261261b86d8"
             }
         """
-        val auditEntry = AuditEntry(
-            "tiltak-refusjon-api",
-            "Z992785",
-            "24070178547",
-            EventType.READ,
-            true,
-            Instant.ofEpochSecond(1693222027, 76186081),
-            "Oppslag på korreksjoner",
-            URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-            "GET",
-            "b9594bd4-58cb-4ec0-99ec-a261261b86d8"
-        )
+        val auditEntry =
+            AuditEntry(
+                "tiltak-refusjon-api",
+                "Z992785",
+                "24070178547",
+                EventType.READ,
+                true,
+                Instant.ofEpochSecond(1693222027, 76186081),
+                "Oppslag på korreksjoner",
+                URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
+                "GET",
+                "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
+            )
 
         assertEquals(auditEntry, mapper.readValue<AuditEntry>(jsonMelding))
     }
@@ -66,19 +67,20 @@ class JsonDeserialiseringTest {
              "correlationId":"b9594bd4-58cb-4ec0-99ec-a261261b86d8"
             }
         """
-        val auditEntry = AuditEntry(
-            "tiltak-refusjon-api",
-            "Z992785",
-            "24070178547",
-            EventType.READ,
-            true,
-            // "2023-08-28T10:21:29.865897389Z"
-            ZonedDateTime.of(2023, 8, 28, 10, 21, 29, 865897389, ZoneOffset.UTC).toInstant(),
-            "Oppslag på korreksjoner",
-            URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-            "GET",
-            "b9594bd4-58cb-4ec0-99ec-a261261b86d8"
-        )
+        val auditEntry =
+            AuditEntry(
+                "tiltak-refusjon-api",
+                "Z992785",
+                "24070178547",
+                EventType.READ,
+                true,
+                // "2023-08-28T10:21:29.865897389Z"
+                ZonedDateTime.of(2023, 8, 28, 10, 21, 29, 865897389, ZoneOffset.UTC).toInstant(),
+                "Oppslag på korreksjoner",
+                URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
+                "GET",
+                "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
+            )
 
         assertEquals(auditEntry, mapper.readValue<AuditEntry>(jsonMelding))
     }
@@ -88,7 +90,7 @@ class JsonDeserialiseringTest {
         val testFnr = "16120101181"
         try {
             mapper.readValue<AuditEntry>(
-                """ {"deltakerFnr": "${testFnr}"} """
+                """ {"deltakerFnr": "$testFnr"} """,
             )
             assertFalse("Deserialisering burde feile") { true }
         } catch (e: Exception) {

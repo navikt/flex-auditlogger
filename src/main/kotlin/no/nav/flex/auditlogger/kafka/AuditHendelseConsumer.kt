@@ -16,58 +16,63 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import java.time.Duration
 
-
 class AuditHendelseConsumer(
-    private val consumer: Consumer<String, String>
+    private val consumer: Consumer<String, String>,
 ) {
     val auditLogger: AuditLogger = AuditLoggerImpl()
     val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-    fun start() = runBlocking {
-        log.info("Starter konsumering på topic: ${Topics.AUDIT_HENDELSE}")
-        consumer.subscribe(listOf(Topics.AUDIT_HENDELSE))
-        mapper.registerModule(JavaTimeModule())
-        while (true) {
-            val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofSeconds(5))
-            records.isEmpty && continue
-            records.forEach {
-                try {
-                    val melding: AuditEntry = mapper.readValue(it.value())
+    fun start() =
+        runBlocking {
+            log.info("Starter konsumering på topic: ${Topics.AUDIT_HENDELSE}")
+            consumer.subscribe(listOf(Topics.AUDIT_HENDELSE))
+            mapper.registerModule(JavaTimeModule())
+            while (true) {
+                val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofSeconds(5))
+                records.isEmpty && continue
+                records.forEach {
+                    try {
+                        val melding: AuditEntry = mapper.readValue(it.value())
 
-                    val cefMessage = CefMessage.builder()
-                        .applicationName("Flex")
-                        .loggerName(melding.appNavn)
-                        .event(cefEvent(melding.eventType))
-                        .name("Sporingslogg")
-                        .severity(CefMessageSeverity.INFO)
-                        .authorizationDecision(if (melding.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY) // Bruk AuthorizationDecision.DENY hvis Nav-ansatt ikke fikk tilgang til å gjøre oppslag
-                        .sourceUserId(melding.utførtAv)
-                        .destinationUserId(melding.oppslagPå)
-                        .timeEnded(melding.oppslagUtførtTid.toEpochMilli())
-                        .extension("msg", melding.beskrivelse)
-                        .extension("request", melding.requestUrl.toString())
-                        .extension("requestMethod", melding.requestMethod)
-                        .extension("dproc", melding.correlationId)
-                        .build()
+                        val cefMessage =
+                            CefMessage.builder()
+                                .applicationName("Flex")
+                                .loggerName(melding.appNavn)
+                                .event(cefEvent(melding.eventType))
+                                .name("Sporingslogg")
+                                .severity(CefMessageSeverity.INFO)
+                                .authorizationDecision(
+                                    if (melding.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY,
+                                ) // Bruk AuthorizationDecision.DENY hvis Nav-ansatt ikke fikk tilgang til å gjøre oppslag
+                                .sourceUserId(melding.utførtAv)
+                                .destinationUserId(melding.oppslagPå)
+                                .timeEnded(melding.oppslagUtførtTid.toEpochMilli())
+                                .extension("msg", melding.beskrivelse)
+                                .extension("request", melding.requestUrl.toString())
+                                .extension("requestMethod", melding.requestMethod)
+                                .extension("dproc", melding.correlationId)
+                                .build()
 
-                    auditLogger.log(cefMessage)
-                } catch (ex: Exception) {
-                    log.error("Kunne ikke logge audit-hendelse: {}", vaskFnr(ex.message))
+                        auditLogger.log(cefMessage)
+                    } catch (ex: Exception) {
+                        log.error("Kunne ikke logge audit-hendelse: {}", vaskFnr(ex.message))
+                    }
+                    consumer.commitAsync()
                 }
-                consumer.commitAsync()
             }
         }
-    }
 }
 
-fun cefEvent(e: EventType) = when (e) {
-    EventType.CREATE -> CefMessageEvent.CREATE
-    EventType.READ -> CefMessageEvent.ACCESS
-    EventType.UPDATE -> CefMessageEvent.UPDATE
-    EventType.DELETE -> CefMessageEvent.DELETE
-}
+fun cefEvent(e: EventType) =
+    when (e) {
+        EventType.CREATE -> CefMessageEvent.CREATE
+        EventType.READ -> CefMessageEvent.ACCESS
+        EventType.UPDATE -> CefMessageEvent.UPDATE
+        EventType.DELETE -> CefMessageEvent.DELETE
+    }
 
 private val fnrStringRegex = Regex("\"(\\d{4})\\d{7}\"")
+
 fun vaskFnr(message: String?) =
     message?.replace(fnrStringRegex) { transform: MatchResult ->
         "\"${transform.groups.get(1)?.value ?: "****"}*******\""
