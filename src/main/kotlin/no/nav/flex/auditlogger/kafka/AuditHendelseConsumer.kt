@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.runBlocking
 import no.nav.common.audit_log.cef.AuthorizationDecision
 import no.nav.common.audit_log.cef.CefMessage
 import no.nav.common.audit_log.cef.CefMessageEvent
@@ -23,7 +22,7 @@ class AuditHendelseConsumer(
     val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     fun start() =
-        runBlocking {
+        run {
             log.info("Starter konsumering på topic: ${Topics.AUDIT_HENDELSE}")
             consumer.subscribe(listOf(Topics.AUDIT_HENDELSE))
             mapper.registerModule(JavaTimeModule())

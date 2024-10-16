@@ -1,44 +1,23 @@
-package no.nav.flex.auditlogger
+package no.nav.helse.flex
 
-import io.ktor.http.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import mu.KotlinLogging
-import no.nav.flex.auditlogger.kafka.AuditHendelseConsumer
-import no.nav.flex.auditlogger.kafka.properties
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import java.io.Closeable
+import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.kafka.annotation.EnableKafka
+import org.springframework.retry.annotation.EnableRetry
+import org.springframework.scheduling.annotation.EnableScheduling
 
-class App(private val auditHendelseConsumer: AuditHendelseConsumer) : Closeable {
-    private val logger = KotlinLogging.logger {}
-    private val server =
-        embeddedServer(Netty, port = 8092) {
+@SpringBootApplication
+@EnableCaching
+@EnableJwtTokenValidation
+@EnableRetry
+@EnableScheduling
+@EnableKafka
+class Application
 
-            routing {
-                get("/internal/isAlive") { call.respond(HttpStatusCode.OK) }
-                get("/internal/isReady") { call.respond(HttpStatusCode.OK) }
-            }
-        }
-
-    fun start() {
-        logger.info("Starter applikasjon :)")
-        server.start()
-        auditHendelseConsumer.start()
-    }
-
-    override fun close() {
-        logger.info("Stopper app")
-        server.stop(0, 0)
-    }
-}
-
-fun main() {
-    // Setup kafka and database
-    val consumer: Consumer<String, String> = KafkaConsumer(properties())
-    val auditHendelseConsumer = AuditHendelseConsumer(consumer)
-
-    App(auditHendelseConsumer).start()
+fun main(args: Array<String>) {
+    // Lettuce-spring boot interaksjon. Se https://github.com/lettuce-io/lettuce-core/issues/1767
+    System.setProperty("io.lettuce.core.jfr", "false")
+    runApplication<Application>(*args)
 }
