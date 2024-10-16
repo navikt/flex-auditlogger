@@ -52,7 +52,6 @@ spec:
         - id: loki
         - id: elastic
   accessPolicy:
-  {{/each}}
     inbound:
       rules:
         - application: ditt-sykefravaer
