@@ -1,0 +1,57 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: flex-auditlogging
+  namespace: flex
+  labels:
+    team: flex
+spec:
+  image: {{image}}
+  replicas:
+    min: {{replicas_min}}
+    max: {{replicas_max}}
+    scalingStrategy:
+      cpu:
+        thresholdPercentage: 90
+  port: 8080
+  liveness:
+    path: /internal/health/liveness
+  readiness:
+    path: /internal/health/readiness
+  startup:
+    path: /internal/health/liveness
+    initialDelay: 40
+  leaderElection: true
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+  resources:
+    limits:
+      memory: {{memory}}
+    requests:
+      cpu: {{cpu}}
+      memory: {{memory}}
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+      tenant: {{azureTenant}}
+  kafka:
+    pool: {{kafkaPool}}
+  tokenx:
+    enabled: true
+  redis:
+    - instance: sessions
+      access: readwrite
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+  accessPolicy:
+    inbound:
+      rules:
+        - application: flex-internal-frontend

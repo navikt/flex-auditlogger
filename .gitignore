@@ -1,0 +1,10 @@
+.idea
+*.iml
+
+# Gradle files
+out/
+build/
+.gradle/
+.kotlin/
+
+bin/
