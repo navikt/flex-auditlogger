@@ -1,9 +1,8 @@
 package no.nav.flex.auditlogger.kafka
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import no.nav.flex.auditlogger.utils.objectMapper
+import no.nav.flex.auditlogger.utils.vaskFnr
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should contain`
 import org.amshove.kluent.`should not contain`
@@ -14,16 +13,11 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class JsonDeserialiseringTest {
-    val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
-    init {
-        mapper.registerModule(JavaTimeModule())
-    }
-
     @Test
     fun `test vellykket deserialsering av kafkamelding med timestamp`() {
         val jsonMelding = """
-            {"appNavn":"tiltak-refusjon-api",
+            {"fagsystem":"tiltak",
+             "appNavn":"tiltak-refusjon-api",
              "utførtAv":"Z992785",
              "oppslagPå":"24070178547",
              "eventType":"READ",
@@ -37,25 +31,27 @@ class JsonDeserialiseringTest {
         """
         val auditEntry =
             AuditEntry(
-                "tiltak-refusjon-api",
-                "Z992785",
-                "24070178547",
-                EventType.READ,
-                true,
-                Instant.ofEpochSecond(1693222027, 76186081),
-                "Oppslag på korreksjoner",
-                URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-                "GET",
-                "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
+                fagsystem = "tiltak",
+                appNavn = "tiltak-refusjon-api",
+                utførtAv = "Z992785",
+                oppslagPå = "24070178547",
+                eventType = EventType.READ,
+                forespørselTillatt = true,
+                oppslagUtførtTid = Instant.ofEpochSecond(1693222027, 76186081),
+                beskrivelse = "Oppslag på korreksjoner",
+                requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
+                requestMethod = "GET",
+                correlationId = "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        auditEntry `should be equal to` mapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
     fun `test vellykket deserialsering av kafkamelding med datostring`() {
         val jsonMelding = """
-            {"appNavn":"tiltak-refusjon-api",
+            {"fagsystem":"tiltak",
+             "appNavn":"tiltak-refusjon-api",
              "utførtAv":"Z992785",
              "oppslagPå":"24070178547",
              "eventType":"READ",
@@ -69,20 +65,20 @@ class JsonDeserialiseringTest {
         """
         val auditEntry =
             AuditEntry(
-                "tiltak-refusjon-api",
-                "Z992785",
-                "24070178547",
-                EventType.READ,
-                true,
-                // "2023-08-28T10:21:29.865897389Z"
-                ZonedDateTime.of(2023, 8, 28, 10, 21, 29, 865897389, ZoneOffset.UTC).toInstant(),
-                "Oppslag på korreksjoner",
-                URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-                "GET",
-                "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
+                fagsystem = "tiltak",
+                appNavn = "tiltak-refusjon-api",
+                utførtAv = "Z992785",
+                oppslagPå = "24070178547",
+                eventType = EventType.READ,
+                forespørselTillatt = true,
+                oppslagUtførtTid = ZonedDateTime.of(2023, 8, 28, 10, 21, 29, 865897389, ZoneOffset.UTC).toInstant(),
+                beskrivelse = "Oppslag på korreksjoner",
+                requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
+                requestMethod = "GET",
+                correlationId = "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        auditEntry `should be equal to` mapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test

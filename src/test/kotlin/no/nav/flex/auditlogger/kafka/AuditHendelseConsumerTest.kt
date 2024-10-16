@@ -37,7 +37,20 @@ class AuditHendelseConsumerTest {
     @SpyBean
     private lateinit var auditLogger: AuditLogger
 
-    private val kafkaMessage = auditEntryKafkaMelding()
+    private val auditEntry =
+        AuditEntry(
+            fagsystem = "Sykepenger",
+            appNavn = "flex-internal-frontend",
+            utførtAv = "12345678910",
+            oppslagPå = "10987654321",
+            eventType = EventType.READ,
+            forespørselTillatt = true,
+            oppslagUtførtTid = Instant.now(),
+            beskrivelse = "Sjekket søknaden til personen",
+            requestUrl = URI.create("https://flex-internal.no"),
+            requestMethod = "GET",
+            correlationId = UUID.randomUUID().toString(),
+        )
 
     companion object {
         init {
@@ -52,14 +65,12 @@ class AuditHendelseConsumerTest {
     @Order(1)
     fun `Sykmelding med redusert venteperiode lagres`() {
         redusertVenteperiodeConsumer.prosesserKafkaMelding(
-            kafkaMessage.serialisertTilString(),
+            auditEntry.serialisertTilString(),
         )
-
-        val auditEntry = kafkaMessage.auditEntry
 
         val cefMessage =
             CefMessage.builder()
-                .applicationName("Flex")
+                .applicationName("Sykepenger")
                 .loggerName(auditEntry.appNavn)
                 .event(cefEvent(auditEntry.eventType))
                 .name("Sporingslogg")
@@ -78,50 +89,6 @@ class AuditHendelseConsumerTest {
                 .build()
 
         verify(auditLogger).log(cefMessage)
-        cefMessage.toString() `should contain` "CEF:0|Flex|flex-internal-frontend|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Sjekket søknaden til personen request=https://flex-internal.no duid=10987654321 requestMethod=GET flexString1Label=Decision"
-    }
-
-//    @Test
-//    @Order(2)
-//    fun `Kan lese inn samme sykmelding flere ganger`() {
-//        redusertVenteperiodeConsumer.prosesserKafkaMelding(
-//            sykmeldingId,
-//            kafkaMessage.serialisertTilString(),
-//        )
-//
-//        redusertVenteperiodeRepository.existsBySykmeldingId(sykmeldingId) shouldBeEqualTo true
-//    }
-//
-//    @Test
-//    @Order(3)
-//    fun `Fjernes ved tombstone event`() {
-//        redusertVenteperiodeConsumer.prosesserKafkaMelding(
-//            sykmeldingId,
-//            null,
-//        )
-//
-//        redusertVenteperiodeRepository.existsBySykmeldingId(sykmeldingId) shouldBeEqualTo false
-//    }
-
-    private fun auditEntryKafkaMelding(): AuditEntryKafkaMelding {
-        return AuditEntryKafkaMelding(
-            auditEntry =
-                AuditEntry(
-                    appNavn = "flex-internal-frontend",
-                    utførtAv = "12345678910",
-                    oppslagPå = "10987654321",
-                    eventType = EventType.READ,
-                    forespørselTillatt = true,
-                    oppslagUtførtTid = Instant.now(),
-                    beskrivelse = "Sjekket søknaden til personen",
-                    requestUrl = URI.create("https://flex-internal.no"),
-                    requestMethod = "GET",
-                    correlationId = UUID.randomUUID().toString(),
-                ),
-        )
+        cefMessage.toString() `should contain` "CEF:0|Sykepenger|flex-internal-frontend|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Sjekket søknaden til personen request=https://flex-internal.no duid=10987654321 requestMethod=GET flexString1Label=Decision"
     }
 }
-
-data class AuditEntryKafkaMelding(
-    val auditEntry: AuditEntry,
-)

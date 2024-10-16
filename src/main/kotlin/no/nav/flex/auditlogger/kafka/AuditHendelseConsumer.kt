@@ -1,5 +1,6 @@
 package no.nav.flex.auditlogger.kafka
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.common.audit_log.cef.AuthorizationDecision
 import no.nav.common.audit_log.cef.CefMessage
 import no.nav.common.audit_log.cef.CefMessageEvent
@@ -7,6 +8,7 @@ import no.nav.common.audit_log.cef.CefMessageSeverity
 import no.nav.common.audit_log.log.AuditLogger
 import no.nav.flex.auditlogger.logger
 import no.nav.flex.auditlogger.utils.objectMapper
+import no.nav.flex.auditlogger.utils.vaskFnr
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.Acknowledgment
@@ -38,11 +40,10 @@ class AuditHendelseConsumer(
 
     fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
         try {
-            val jsonNode = objectMapper.readTree(auditEntryKafkaMelding)
-            val auditEntry: AuditEntry = objectMapper.treeToValue(jsonNode["auditEntry"], AuditEntry::class.java)
+            val auditEntry: AuditEntry = objectMapper.readValue<AuditEntry>(auditEntryKafkaMelding)
             val cefMessage =
                 CefMessage.builder()
-                    .applicationName("Flex")
+                    .applicationName(auditEntry.fagsystem)
                     .loggerName(auditEntry.appNavn)
                     .event(cefEvent(auditEntry.eventType))
                     .name("Sporingslogg")
@@ -74,9 +75,3 @@ fun cefEvent(e: EventType) =
         EventType.UPDATE -> CefMessageEvent.UPDATE
         EventType.DELETE -> CefMessageEvent.DELETE
     }
-
-val fnrStringRegex = Regex("\\d{11}") // Regex to match exactly 11 digits
-
-fun vaskFnr(message: String?): String {
-    return message?.replace(fnrStringRegex, "[fnr]") ?: ""
-}
