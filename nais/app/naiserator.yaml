@@ -54,13 +54,4 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: ditt-sykefravaer
-        - application: sykepengesoknad
-        - application: sykepengesoknad-arkivering-oppgave
         - application: flex-internal-frontend
-        - application: syfomodiaperson
-          namespace: teamsykefravr
-        - application: sparkel-dokumenter
-          namespace: tbd
-        - application: spinntektsmelding-frontend
-          namespace: helsearbeidsgiver
