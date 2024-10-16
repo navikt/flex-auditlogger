@@ -29,7 +29,7 @@ class AivenKafkaConfig(
     @Value("\${aiven-kafka.auto-offset-reset}") private val kafkaAutoOffsetReset: String,
 ) {
     @Bean
-    fun sykepengesoknadProducer(): KafkaProducer<String, String> {
+    fun auditEntryProducer(): KafkaProducer<String, String> {
         val configs =
             mapOf(
                 KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,

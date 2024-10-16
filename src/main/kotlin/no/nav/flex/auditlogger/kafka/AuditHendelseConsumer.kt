@@ -1,12 +1,10 @@
 package no.nav.flex.auditlogger.kafka
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.common.audit_log.cef.AuthorizationDecision
 import no.nav.common.audit_log.cef.CefMessage
 import no.nav.common.audit_log.cef.CefMessageEvent
 import no.nav.common.audit_log.cef.CefMessageSeverity
 import no.nav.common.audit_log.log.AuditLogger
-import no.nav.common.audit_log.log.AuditLoggerImpl
 import no.nav.flex.auditlogger.logger
 import no.nav.flex.auditlogger.utils.objectMapper
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -17,9 +15,10 @@ import org.springframework.stereotype.Component
 const val AUDIT_TOPIC = "flex.auditlogging"
 
 @Component
-class AuditHendelseConsumer {
+class AuditHendelseConsumer(
+    private val auditLogger: AuditLogger,
+) {
     val log = logger()
-    val auditLogger: AuditLogger = AuditLoggerImpl()
 
     @KafkaListener(
         topics = [AUDIT_TOPIC],
@@ -33,27 +32,32 @@ class AuditHendelseConsumer {
         acknowledgment: Acknowledgment,
     ) {
         log.info("Starter konsumering på topic: $AUDIT_TOPIC")
-        try {
-            val melding: AuditEntry = objectMapper.readValue(cr.value())
+        prosesserKafkaMelding(cr.value())
+        acknowledgment.acknowledge()
+    }
 
+    fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
+        try {
+            val jsonNode = objectMapper.readTree(auditEntryKafkaMelding)
+            val auditEntry: AuditEntry = objectMapper.treeToValue(jsonNode["auditEntry"], AuditEntry::class.java)
             val cefMessage =
                 CefMessage.builder()
                     .applicationName("Flex")
-                    .loggerName(melding.appNavn)
-                    .event(cefEvent(melding.eventType))
+                    .loggerName(auditEntry.appNavn)
+                    .event(cefEvent(auditEntry.eventType))
                     .name("Sporingslogg")
                     .severity(CefMessageSeverity.INFO)
                     .authorizationDecision(
                         // Bruk AuthorizationDecision.DENY hvis Nav-ansatt ikke fikk tilgang til å gjøre oppslag
-                        if (melding.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY,
+                        if (auditEntry.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY,
                     )
-                    .sourceUserId(melding.utførtAv)
-                    .destinationUserId(melding.oppslagPå)
-                    .timeEnded(melding.oppslagUtførtTid.toEpochMilli())
-                    .extension("msg", melding.beskrivelse)
-                    .extension("request", melding.requestUrl.toString())
-                    .extension("requestMethod", melding.requestMethod)
-                    .extension("dproc", melding.correlationId)
+                    .sourceUserId(auditEntry.utførtAv)
+                    .destinationUserId(auditEntry.oppslagPå)
+                    .timeEnded(auditEntry.oppslagUtførtTid.toEpochMilli())
+                    .extension("msg", auditEntry.beskrivelse)
+                    .extension("request", auditEntry.requestUrl.toString())
+                    .extension("requestMethod", auditEntry.requestMethod)
+                    .extension("dproc", auditEntry.correlationId)
                     .build()
 
             auditLogger.log(cefMessage)
