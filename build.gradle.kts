@@ -5,7 +5,6 @@ plugins {
     id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
-    id("maven-publish")
     kotlin("jvm") version "2.0.20"
     kotlin("plugin.spring") version "2.0.20"
 }
@@ -55,40 +54,6 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.5.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.0.21")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
-}
-
-publishing {
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/navikt/sykepengesoknad-kafka")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_PASSWORD")
-            }
-        }
-    }
-    publications {
-        create<MavenPublication>("mavenJava") {
-
-            pom {
-                name.set("sykepengesoknad-kafka")
-                url.set("https://github.com/navikt/sykepengesoknad-kafka")
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:https://github.com/navikt/sykepengesoknad-kafka.git")
-                    developerConnection.set("scm:git:https://github.com/navikt/sykepengesoknad-kafka.git")
-                    url.set("https://github.com/navikt/sykepengesoknad-kafka")
-                }
-            }
-            from(components["java"])
-        }
-    }
 }
 
 kotlin {
