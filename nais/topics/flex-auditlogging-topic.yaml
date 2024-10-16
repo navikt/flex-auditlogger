@@ -1,0 +1,59 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: flex-auditlogging
+  namespace: flex
+  labels:
+    team: flex
+  annotations:
+    dcat.data.nav.no/title: "flex.auditlogging"
+    dcat.data.nav.no/description: "Topic for flex auditlogging"
+spec:
+  pool: {{kafkaPool}}
+  config:
+    cleanupPolicy: delete
+    minimumInSyncReplicas: 1
+    partitions: 3
+    replication: 3
+    retentionBytes: -1    # Messages will never get deleted because of disk space
+    retentionHours: 6576  # Messages are stored for 6 months
+  acl:
+    - team: flex
+      application: sykepengesoknad-backend
+      access: readwrite
+    - team: tbd
+      application: spedisjon
+      access: read
+    - team: flex
+      application: sykepengesoknad-narmesteleder-varsler
+      access: read
+    - team: flex
+      application: sykepengesoknad-ikke-sendt-altinnvarsel
+      access: read
+    - team: flex
+      application: syfosoknadbrukernotifikasjon
+      access: read
+    - team: flex
+      application: sykepengesoknad-altinn
+      access: read
+    - team: flex
+      application: sykepengesoknad-arkivering-oppgave
+      access: read
+    - team: flex
+      application: flex-syketilfelle
+      access: read
+    - team: flex
+      application: spinnsyn-backend
+      access: read
+    - team: teamsykmelding
+      application: dinesykmeldte-kafka
+      access: read
+    - team: medlemskap
+      application: medlemskap-sykepenger-listener
+      access: read
+    - team: flex
+      application: flex-inntektsmelding-status
+      access: read
+    - team: flex
+      application: ditt-sykefravaer-backend
+      access: read
