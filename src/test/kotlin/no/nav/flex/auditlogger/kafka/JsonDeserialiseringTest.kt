@@ -49,7 +49,7 @@ class JsonDeserialiseringTest {
                 "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        auditEntry `should be equal to`  mapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry `should be equal to` mapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
@@ -82,7 +82,7 @@ class JsonDeserialiseringTest {
                 "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
-        auditEntry `should be equal to`  mapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry `should be equal to` mapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
