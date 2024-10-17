@@ -4,8 +4,8 @@ aiven-kafka:
 no.nav.security.jwt:
   issuer:
     azureator:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/azureator/.well-known/openid-configuration
-      accepted_audience: syfosoknad-client-id
+      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
+      accepted_audience: ${AZURE_APP_CLIENT_ID}
     tokenx:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
-      accepted_audience: sykepengesoknad-backend-client-id
+      discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
+      accepted_audience: ${TOKEN_X_CLIENT_ID}
