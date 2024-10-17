@@ -1,12 +1,7 @@
-azureTenant: nav.no
 kafkaPool: nav-prod
 environment: prod
-db_tier: db-custom-4-15360
-db_size: 250
-db_highAvailability: true
-db_pointInTimeRecovery: true
 cpu: 300m
-memory: 250Mi
+memory: 400Mi
 replicas_min: 1
 replicas_max: 2
 env:
