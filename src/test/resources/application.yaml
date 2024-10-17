@@ -14,3 +14,33 @@ no.nav.security.jwt:
     tokenx:
       discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
       accepted_audience: sykepengesoknad-backend-client-id
+
+spring:
+  profiles.active: default
+  jpa.open-in-view: false
+  main.banner-mode: 'off'
+  kafka:
+    client-id: ${nais.app.name}-${fasit.environment.name}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: ${nais.app.name}-${fasit.environment.name}
+      max-poll-records: 1
+      auto-offset-reset: none
+      enable-auto-commit: false
+
+management:
+  endpoint:
+    prometheus.enabled: true
+    health.probes.enabled: true
+    health.show-details: always
+  endpoints.web:
+    base-path: "/internal"
+    exposure.include: health, prometheus
+  health:
+    livenessstate.enabled: true
+    readinessState.enabled: true
+  metrics.export.prometheus.enabled: true
+
+server:
+  shutdown: graceful
