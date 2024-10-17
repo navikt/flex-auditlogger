@@ -8,7 +8,6 @@ import no.nav.common.audit_log.cef.CefMessageSeverity
 import no.nav.common.audit_log.log.AuditLogger
 import no.nav.flex.auditlogger.Application
 import no.nav.flex.auditlogger.utils.serialisertTilString
-import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.amshove.kluent.`should contain`
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.verify
@@ -26,7 +25,6 @@ import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-@EnableMockOAuth2Server
 @SpringBootTest(classes = [Application::class, KafkaConfig::class])
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE, printOnlyOnFailure = false)
 @AutoConfigureObservability

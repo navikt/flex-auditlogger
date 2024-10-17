@@ -15,11 +15,11 @@ spec:
         thresholdPercentage: 90
   port: 8080
   liveness:
-    path: /internal/health/liveness
+    path: /internal/health
   readiness:
-    path: /internal/health/readiness
+    path: /internal/health
   startup:
-    path: /internal/health/liveness
+    path: /internal/health
     initialDelay: 40
   leaderElection: true
   prometheus:
