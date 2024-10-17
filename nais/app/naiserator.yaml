@@ -31,18 +31,8 @@ spec:
     requests:
       cpu: {{cpu}}
       memory: {{memory}}
-  azure:
-    application:
-      enabled: true
-      allowAllUsers: true
-      tenant: {{azureTenant}}
   kafka:
     pool: {{kafkaPool}}
-  tokenx:
-    enabled: true
-  redis:
-    - instance: sessions
-      access: readwrite
   observability:
     autoInstrumentation:
       enabled: true
