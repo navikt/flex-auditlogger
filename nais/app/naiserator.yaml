@@ -20,7 +20,7 @@ spec:
     path: /internal/health
   startup:
     path: /internal/health
-    initialDelay: 40
+    initialDelay: 60
   leaderElection: true
   prometheus:
     enabled: true
