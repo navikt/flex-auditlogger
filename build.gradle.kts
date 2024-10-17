@@ -29,7 +29,7 @@ repositories {
 }
 
 val jacksonVersion = "2.18.0"
-val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
+val auditLogVersion = "3.2024.09.16_11.09-578823a87a2f"
 val kluentVersion = "1.73"
 val tokenSupportVersion = "5.0.5"
 val testContainersVersion = "1.20.2"
