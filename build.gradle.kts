@@ -51,7 +51,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("ch.qos.logback:logback-classic:1.5.10")
+    testImplementation("ch.qos.logback:logback-classic:1.5.11")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.0.21")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
     testImplementation("org.testcontainers:kafka")
