@@ -10,12 +10,14 @@ import no.nav.flex.auditlogger.logger
 import no.nav.flex.auditlogger.utils.objectMapper
 import no.nav.flex.auditlogger.utils.vaskFnr
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.springframework.context.annotation.Profile
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
 
 const val AUDIT_TOPIC = "flex.auditlogging"
 
+@Profile("test")
 @Component
 class AuditHendelseConsumer(
     private val auditLogger: AuditLogger,

@@ -6,17 +6,8 @@ KAFKA_KEYSTORE_PATH: ""
 aiven-kafka:
   auto-offset-reset: earliest
 
-no.nav.security.jwt:
-  issuer:
-    azureator:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/azureator/.well-known/openid-configuration
-      accepted_audience: syfosoknad-client-id
-    tokenx:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
-      accepted_audience: sykepengesoknad-backend-client-id
-
 spring:
-  profiles.active: default
+  profiles.active: default, test
   jpa.open-in-view: false
   main.banner-mode: 'off'
   kafka:

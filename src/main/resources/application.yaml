@@ -1,15 +1,6 @@
 aiven-kafka:
   auto-offset-reset: none
 
-no.nav.security.jwt:
-  issuer:
-    azureator:
-      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
-      accepted_audience: ${AZURE_APP_CLIENT_ID}
-    tokenx:
-      discoveryurl: ${TOKEN_X_WELL_KNOWN_URL}
-      accepted_audience: ${TOKEN_X_CLIENT_ID}
-
 spring:
   profiles.active: default
   jpa.open-in-view: false
