@@ -67,7 +67,7 @@ class AivenKafkaConfig(
         val config =
             commonConfig() +
                 mapOf(
-                    ConsumerConfig.GROUP_ID_CONFIG to "syfosoknad-consumer",
+                    ConsumerConfig.GROUP_ID_CONFIG to "flex-auditlogging",
                     ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to kafkaAutoOffsetReset,
                     ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false,
                     ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
