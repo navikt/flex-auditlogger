@@ -7,6 +7,6 @@ db_highAvailability: true
 db_pointInTimeRecovery: true
 cpu: 1000m
 memory: 2048Mi
-replicas_min: 0
-replicas_max: 0
+replicas_min: 1
+replicas_max: 2
 env:
