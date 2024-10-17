@@ -1,4 +1,4 @@
-package no.nav.helse.flex
+package no.nav.flex.auditlogger
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.springframework.boot.autoconfigure.SpringBootApplication

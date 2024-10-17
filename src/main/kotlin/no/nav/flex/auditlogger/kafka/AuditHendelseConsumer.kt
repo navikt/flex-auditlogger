@@ -1,65 +1,71 @@
 package no.nav.flex.auditlogger.kafka
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.common.audit_log.cef.AuthorizationDecision
 import no.nav.common.audit_log.cef.CefMessage
 import no.nav.common.audit_log.cef.CefMessageEvent
 import no.nav.common.audit_log.cef.CefMessageSeverity
 import no.nav.common.audit_log.log.AuditLogger
-import no.nav.common.audit_log.log.AuditLoggerImpl
-import no.nav.flex.auditlogger.utils.log
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.consumer.ConsumerRecords
-import java.time.Duration
+import no.nav.flex.auditlogger.logger
+import no.nav.flex.auditlogger.utils.objectMapper
+import no.nav.flex.auditlogger.utils.vaskFnr
+import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.kafka.support.Acknowledgment
+import org.springframework.stereotype.Component
 
+const val AUDIT_TOPIC = "flex.auditlogging"
+
+@Component
 class AuditHendelseConsumer(
-    private val consumer: Consumer<String, String>,
+    private val auditLogger: AuditLogger,
 ) {
-    val auditLogger: AuditLogger = AuditLoggerImpl()
-    val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    val log = logger()
 
-    fun start() =
-        run {
-            log.info("Starter konsumering på topic: ${Topics.AUDIT_HENDELSE}")
-            consumer.subscribe(listOf(Topics.AUDIT_HENDELSE))
-            mapper.registerModule(JavaTimeModule())
-            while (true) {
-                val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofSeconds(5))
-                records.isEmpty && continue
-                records.forEach {
-                    try {
-                        val melding: AuditEntry = mapper.readValue(it.value())
+    @KafkaListener(
+        topics = [AUDIT_TOPIC],
+        containerFactory = "aivenKafkaListenerContainerFactory",
+        properties = ["auto.offset.reset = latest"],
+        id = "flex-auditlogging",
+        idIsGroup = false,
+    )
+    fun listen(
+        cr: ConsumerRecord<String, String>,
+        acknowledgment: Acknowledgment,
+    ) {
+        log.info("Starter konsumering på topic: $AUDIT_TOPIC")
+        prosesserKafkaMelding(cr.value())
+        acknowledgment.acknowledge()
+    }
 
-                        val cefMessage =
-                            CefMessage.builder()
-                                .applicationName("Flex")
-                                .loggerName(melding.appNavn)
-                                .event(cefEvent(melding.eventType))
-                                .name("Sporingslogg")
-                                .severity(CefMessageSeverity.INFO)
-                                .authorizationDecision(
-                                    if (melding.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY,
-                                ) // Bruk AuthorizationDecision.DENY hvis Nav-ansatt ikke fikk tilgang til å gjøre oppslag
-                                .sourceUserId(melding.utførtAv)
-                                .destinationUserId(melding.oppslagPå)
-                                .timeEnded(melding.oppslagUtførtTid.toEpochMilli())
-                                .extension("msg", melding.beskrivelse)
-                                .extension("request", melding.requestUrl.toString())
-                                .extension("requestMethod", melding.requestMethod)
-                                .extension("dproc", melding.correlationId)
-                                .build()
+    fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
+        try {
+            val auditEntry: AuditEntry = objectMapper.readValue<AuditEntry>(auditEntryKafkaMelding)
+            val cefMessage =
+                CefMessage.builder()
+                    .applicationName(auditEntry.fagsystem)
+                    .loggerName(auditEntry.appNavn)
+                    .event(cefEvent(auditEntry.eventType))
+                    .name("Sporingslogg")
+                    .severity(CefMessageSeverity.INFO)
+                    .authorizationDecision(
+                        // Bruk AuthorizationDecision.DENY hvis Nav-ansatt ikke fikk tilgang til å gjøre oppslag
+                        if (auditEntry.forespørselTillatt) AuthorizationDecision.PERMIT else AuthorizationDecision.DENY,
+                    )
+                    .sourceUserId(auditEntry.utførtAv)
+                    .destinationUserId(auditEntry.oppslagPå)
+                    .timeEnded(auditEntry.oppslagUtførtTid.toEpochMilli())
+                    .extension("msg", auditEntry.beskrivelse)
+                    .extension("request", auditEntry.requestUrl.toString())
+                    .extension("requestMethod", auditEntry.requestMethod)
+                    .extension("dproc", auditEntry.correlationId)
+                    .build()
 
-                        auditLogger.log(cefMessage)
-                    } catch (ex: Exception) {
-                        log.error("Kunne ikke logge audit-hendelse: {}", vaskFnr(ex.message))
-                    }
-                    consumer.commitAsync()
-                }
-            }
+            auditLogger.log(cefMessage)
+        } catch (ex: Exception) {
+            log.error("Kunne ikke logge audit-hendelse: {}", vaskFnr(ex.message))
         }
+    }
 }
 
 fun cefEvent(e: EventType) =
@@ -69,9 +75,3 @@ fun cefEvent(e: EventType) =
         EventType.UPDATE -> CefMessageEvent.UPDATE
         EventType.DELETE -> CefMessageEvent.DELETE
     }
-
-val fnrStringRegex = Regex("\\d{11}") // Regex to match exactly 11 digits
-
-fun vaskFnr(message: String?): String {
-    return message?.replace(fnrStringRegex, "[fnr]") ?: ""
-}

@@ -32,6 +32,7 @@ val jacksonVersion = "2.18.0"
 val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
 val kluentVersion = "1.73"
 val tokenSupportVersion = "5.0.5"
+val testContainersVersion = "1.20.2"
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -43,17 +44,22 @@ dependencies {
     implementation("no.nav.common:audit-log:$auditLogVersion")
 
     // spring
-    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
     implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
     testImplementation("ch.qos.logback:logback-classic:1.5.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.0.21")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
+    testImplementation("org.testcontainers:kafka")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
 }
 
 kotlin {
