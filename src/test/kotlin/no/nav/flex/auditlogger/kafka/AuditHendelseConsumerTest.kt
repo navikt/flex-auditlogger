@@ -44,7 +44,6 @@ class AuditHendelseConsumerTest {
             beskrivelse = "Sjekket søknaden til personen",
             requestUrl = URI.create("https://flex-internal.no"),
             requestMethod = "GET",
-            correlationId = UUID.randomUUID().toString(),
         )
 
     companion object {
