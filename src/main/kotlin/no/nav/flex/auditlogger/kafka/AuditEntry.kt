@@ -19,7 +19,6 @@ data class AuditEntry(
     val beskrivelse: String,
     val requestUrl: URI,
     val requestMethod: String,
-    val correlationId: String,
 ) {
     fun tilCEFFormat(): String {
         return """

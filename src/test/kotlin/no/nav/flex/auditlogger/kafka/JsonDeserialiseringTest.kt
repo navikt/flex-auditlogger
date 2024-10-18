@@ -25,8 +25,7 @@ class JsonDeserialiseringTest {
              "oppslagUtførtTid":1693222027.076186081,
              "beskrivelse":"Oppslag på korreksjoner",
              "requestUrl":"/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ",
-             "requestMethod":"GET",
-             "correlationId":"b9594bd4-58cb-4ec0-99ec-a261261b86d8"
+             "requestMethod":"GET"
             }
         """
         val auditEntry =
@@ -41,7 +40,6 @@ class JsonDeserialiseringTest {
                 beskrivelse = "Oppslag på korreksjoner",
                 requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
                 requestMethod = "GET",
-                correlationId = "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
         auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
@@ -59,8 +57,7 @@ class JsonDeserialiseringTest {
              "oppslagUtførtTid":"2023-08-28T10:21:29.865897389Z",
              "beskrivelse":"Oppslag på korreksjoner",
              "requestUrl":"/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ",
-             "requestMethod":"GET",
-             "correlationId":"b9594bd4-58cb-4ec0-99ec-a261261b86d8"
+             "requestMethod":"GET"
             }
         """
         val auditEntry =
@@ -75,7 +72,6 @@ class JsonDeserialiseringTest {
                 beskrivelse = "Oppslag på korreksjoner",
                 requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
                 requestMethod = "GET",
-                correlationId = "b9594bd4-58cb-4ec0-99ec-a261261b86d8",
             )
 
         auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
