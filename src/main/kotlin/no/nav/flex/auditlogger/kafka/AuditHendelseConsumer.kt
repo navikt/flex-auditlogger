@@ -3,7 +3,6 @@ package no.nav.flex.auditlogger.kafka
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.flex.auditlogger.logger
 import no.nav.flex.auditlogger.utils.objectMapper
-import no.nav.flex.auditlogger.utils.serialisertTilString
 import no.nav.flex.auditlogger.utils.vaskFnr
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
@@ -37,8 +36,8 @@ class AuditHendelseConsumer(
 
     fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
         try {
+            log.info("Logger info til audidlogging: $auditEntryKafkaMelding")
             val auditEntry: AuditEntry = objectMapper.readValue<AuditEntry>(auditEntryKafkaMelding)
-            log.info("Logger info til audidlogging: ${auditEntry.serialisertTilString()}")
             auditLogger.info(auditEntry.tilCEFFormat())
         } catch (ex: Exception) {
             log.error("Kunne ikke logge audit-hendelse: {}", vaskFnr(ex.message))
