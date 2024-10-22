@@ -21,17 +21,11 @@ data class AuditEntry(
     val requestMethod: String,
 ) {
     fun tilCEFFormat(): String {
-        return """
-            CEF:0|${this.fagsystem}|${this.appNavn}|1.0|${eventType.logString}|Sporingslogg|INFO|
-            flexString1=${if (this.forespørselTillatt) "Permit" else "Deny"} 
-            msg=${this.beskrivelse} 
-            request=${this.requestUrl} 
-            suid=${this.utførtAv} 
-            duid=${this.oppslagPå} 
-            requestMethod=${this.requestMethod} 
-            flexString1Label=Decision 
-            end=${this.oppslagUtførtTid}
-            """.trimIndent()
+        return "CEF:0|${this.fagsystem}|${this.appNavn}|1.0|${eventType.logString}|" +
+            "Sporingslogg|INFO|flexString1=${if (this.forespørselTillatt) "Permit" else "Deny"} " +
+            "msg=${this.beskrivelse} request=${this.requestUrl} suid=${this.utførtAv} " +
+            "duid=${this.oppslagPå} requestMethod=${this.requestMethod} flexString1Label=Decision " +
+            "end=${this.oppslagUtførtTid}"
     }
 }
 

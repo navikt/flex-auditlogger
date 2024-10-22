@@ -18,7 +18,6 @@ import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import java.net.URI
 import java.time.Instant
-import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -57,7 +56,7 @@ class AuditHendelseConsumerTest {
 
     @Test
     @Order(1)
-    fun `Sykmelding med redusert venteperiode lagres`() {
+    fun `Prosesserer auditEntry fra kafka`() {
         redusertVenteperiodeConsumer.prosesserKafkaMelding(
             auditEntry.serialisertTilString(),
         )
@@ -66,15 +65,6 @@ class AuditHendelseConsumerTest {
 
         verify(auditLogger).info(cefMessage)
         cefMessage `should contain`
-            """
-            CEF:0|Sykepenger|flex-internal-frontend|1.0|audit:access|Sporingslogg|INFO|
-            flexString1=Permit 
-            msg=Sjekket søknaden til personen 
-            request=https://flex-internal.no 
-            suid=12345678910 
-            duid=10987654321 
-            requestMethod=GET 
-            flexString1Label=Decision
-            """.trimIndent()
+            "CEF:0|Sykepenger|flex-internal-frontend|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Sjekket søknaden til personen request=https://flex-internal.no suid=12345678910 duid=10987654321 requestMethod=GET flexString1Label=Decision"
     }
 }
