@@ -40,7 +40,3 @@ spec:
       destinations:
         - id: loki
         - id: elastic
-  accessPolicy:
-    inbound:
-      rules:
-        - application: flex-internal-frontend
