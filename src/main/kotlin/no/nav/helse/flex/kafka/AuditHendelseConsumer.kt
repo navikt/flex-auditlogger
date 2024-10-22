@@ -1,9 +1,9 @@
-package no.nav.flex.auditlogger.kafka
+package no.nav.helse.flex.kafka
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.flex.auditlogger.logger
-import no.nav.flex.auditlogger.utils.objectMapper
-import no.nav.flex.auditlogger.utils.vaskFnr
+import no.nav.helse.flex.logger
+import no.nav.helse.flex.utils.objectMapper
+import no.nav.helse.flex.utils.vaskFnr
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
 import org.springframework.kafka.annotation.KafkaListener
@@ -36,7 +36,7 @@ class AuditHendelseConsumer(
 
     fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
         try {
-            log.info("Logger info til audidlogging: $auditEntryKafkaMelding")
+            log.info("Logger info til auditlogging: $auditEntryKafkaMelding")
             val auditEntry: AuditEntry = objectMapper.readValue<AuditEntry>(auditEntryKafkaMelding)
             auditLogger.info(auditEntry.tilCEFFormat())
         } catch (ex: Exception) {

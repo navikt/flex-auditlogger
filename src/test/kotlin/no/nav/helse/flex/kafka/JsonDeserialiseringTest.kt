@@ -1,8 +1,8 @@
-package no.nav.flex.auditlogger.kafka
+package no.nav.helse.flex.kafka
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.flex.auditlogger.utils.objectMapper
-import no.nav.flex.auditlogger.utils.vaskFnr
+import no.nav.helse.flex.utils.objectMapper
+import no.nav.helse.flex.utils.vaskFnr
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should contain`
 import org.amshove.kluent.`should not contain`

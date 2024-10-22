@@ -1,6 +1,6 @@
-package no.nav.flex.auditlogger.kafka
+package no.nav.helse.flex.kafka
 
-import no.nav.flex.auditlogger.logger
+import no.nav.helse.flex.logger
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SaslConfigs
@@ -28,7 +28,6 @@ class KafkaConfig(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaBrokers,
                 SaslConfigs.SASL_MECHANISM to "PLAIN",
             )
-        log.info("Kafka Producer Config: $configs")
 
         return KafkaProducer(configs)
     }

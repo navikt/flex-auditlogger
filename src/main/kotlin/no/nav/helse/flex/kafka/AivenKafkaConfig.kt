@@ -1,4 +1,4 @@
-package no.nav.flex.auditlogger.kafka
+package no.nav.helse.flex.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG

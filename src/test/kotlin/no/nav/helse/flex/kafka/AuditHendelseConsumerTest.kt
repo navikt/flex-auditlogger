@@ -1,9 +1,9 @@
 @file:Suppress("ktlint:standard:max-line-length")
 
-package no.nav.flex.auditlogger.kafka
+package no.nav.helse.flex.kafka
 
-import no.nav.flex.auditlogger.Application
-import no.nav.flex.auditlogger.utils.serialisertTilString
+import no.nav.helse.flex.Application
+import no.nav.helse.flex.utils.serialisertTilString
 import org.amshove.kluent.`should contain`
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.verify
