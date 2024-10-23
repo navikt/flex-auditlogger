@@ -40,7 +40,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-//    implementation("no.nav.common:audit-log:$auditLogVersion")
+    implementation("com.papertrailapp:logback-syslog4j:1.0.0")
 
     // spring
     implementation("org.springframework.kafka:spring-kafka")

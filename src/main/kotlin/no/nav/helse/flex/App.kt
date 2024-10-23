@@ -1,4 +1,4 @@
-package no.nav.flex.auditlogger
+package no.nav.helse.flex
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

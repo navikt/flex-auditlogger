@@ -1,4 +1,4 @@
-package no.nav.flex.auditlogger.utils
+package no.nav.helse.flex.utils
 
 val fnrStringRegex = Regex("\\d{11}") // Regex to match exactly 11 digits
 

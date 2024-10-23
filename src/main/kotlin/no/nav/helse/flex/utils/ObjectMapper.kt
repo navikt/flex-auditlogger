@@ -1,4 +1,4 @@
-package no.nav.flex.auditlogger.utils
+package no.nav.helse.flex.utils
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
