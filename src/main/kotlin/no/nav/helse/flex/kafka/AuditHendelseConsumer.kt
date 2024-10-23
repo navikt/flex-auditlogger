@@ -29,14 +29,12 @@ class AuditHendelseConsumer(
         cr: ConsumerRecord<String, String>,
         acknowledgment: Acknowledgment,
     ) {
-        log.info("Starter konsumering på topic: $AUDIT_TOPIC")
         prosesserKafkaMelding(cr.value())
         acknowledgment.acknowledge()
     }
 
     fun prosesserKafkaMelding(auditEntryKafkaMelding: String) {
         try {
-            log.info("Logger info til auditlogging: $auditEntryKafkaMelding")
             val auditEntry: AuditEntry = objectMapper.readValue<AuditEntry>(auditEntryKafkaMelding)
             auditLogger.info(auditEntry.tilCEFFormat())
         } catch (ex: Exception) {
