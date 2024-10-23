@@ -25,7 +25,7 @@ data class AuditEntry(
             "Sporingslogg|INFO|flexString1=${if (this.forespørselTillatt) "Permit" else "Deny"} " +
             "msg=${this.beskrivelse} request=${this.requestUrl} suid=${this.utførtAv} " +
             "duid=${this.oppslagPå} requestMethod=${this.requestMethod} flexString1Label=Decision " +
-            "end=${this.oppslagUtførtTid}"
+            "end=${this.oppslagUtførtTid.toEpochMilli()}"
     }
 }
 
