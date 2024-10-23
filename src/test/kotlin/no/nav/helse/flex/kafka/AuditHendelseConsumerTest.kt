@@ -33,16 +33,15 @@ class AuditHendelseConsumerTest {
 
     private val auditEntry =
         AuditEntry(
-            fagsystem = "Sykepenger",
-            appNavn = "flex-internal-frontend",
+            appNavn = "flex-internal",
             utførtAv = "12345678910",
             oppslagPå = "10987654321",
             eventType = EventType.READ,
             forespørselTillatt = true,
             oppslagUtførtTid = Instant.now(),
-            beskrivelse = "Sjekket søknaden til personen",
-            requestUrl = URI.create("https://flex-internal.no"),
-            requestMethod = "GET",
+            beskrivelse = "Henter alle sykepengesoknader",
+            requestUrl = URI.create("/api/flex/sykepengesoknader"),
+            requestMethod = "POST",
         )
 
     companion object {
@@ -65,6 +64,6 @@ class AuditHendelseConsumerTest {
 
         verify(auditLogger).info(cefMessage)
         cefMessage `should contain`
-            "CEF:0|Sykepenger|flex-internal-frontend|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Sjekket søknaden til personen request=https://flex-internal.no suid=12345678910 duid=10987654321 requestMethod=GET flexString1Label=Decision"
+            "CEF:0|Vedtaksløsning for sykepenger|flex-internal|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Henter alle sykepengesoknader request=/api/flex/sykepengesoknader suid=12345678910 duid=10987654321 requestMethod=POST flexString1Label=Decision"
     }
 }

@@ -16,30 +16,29 @@ class JsonDeserialiseringTest {
     @Test
     fun `test vellykket deserialsering av kafkamelding med timestamp`() {
         val jsonMelding = """
-            {"fagsystem":"tiltak",
-             "appNavn":"tiltak-refusjon-api",
+            {"fagsystem":"Vedtaksløsning for sykepenger",
+             "appNavn":"flex-internal",
              "utførtAv":"Z992785",
              "oppslagPå":"24070178547",
              "eventType":"READ",
              "forespørselTillatt":true,
              "oppslagUtførtTid":1693222027.076186081,
-             "beskrivelse":"Oppslag på korreksjoner",
-             "requestUrl":"/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ",
-             "requestMethod":"GET"
+             "beskrivelse":"Henter alle identer for ident",
+             "requestUrl":"/api/flex/identer",
+             "requestMethod":"POST"
             }
         """
         val auditEntry =
             AuditEntry(
-                fagsystem = "tiltak",
-                appNavn = "tiltak-refusjon-api",
+                appNavn = "flex-internal",
                 utførtAv = "Z992785",
                 oppslagPå = "24070178547",
                 eventType = EventType.READ,
                 forespørselTillatt = true,
                 oppslagUtførtTid = Instant.ofEpochSecond(1693222027, 76186081),
-                beskrivelse = "Oppslag på korreksjoner",
-                requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-                requestMethod = "GET",
+                beskrivelse = "Henter alle identer for ident",
+                requestUrl = URI.create("/api/flex/identer"),
+                requestMethod = "POST",
             )
 
         auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
@@ -48,30 +47,29 @@ class JsonDeserialiseringTest {
     @Test
     fun `test vellykket deserialsering av kafkamelding med datostring`() {
         val jsonMelding = """
-            {"fagsystem":"tiltak",
-             "appNavn":"tiltak-refusjon-api",
+            {"fagsystem":"Vedtaksløsning for sykepenger",
+             "appNavn":"flex-internal",
              "utførtAv":"Z992785",
              "oppslagPå":"24070178547",
              "eventType":"READ",
              "forespørselTillatt":true,
              "oppslagUtførtTid":"2023-08-28T10:21:29.865897389Z",
-             "beskrivelse":"Oppslag på korreksjoner",
-             "requestUrl":"/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ",
-             "requestMethod":"GET"
+             "beskrivelse":"Henter alle sykepengesoknader",
+             "requestUrl":"/api/flex/sykepengesoknader",
+             "requestMethod":"POST"
             }
         """
         val auditEntry =
             AuditEntry(
-                fagsystem = "tiltak",
-                appNavn = "tiltak-refusjon-api",
+                appNavn = "flex-internal",
                 utførtAv = "Z992785",
                 oppslagPå = "24070178547",
                 eventType = EventType.READ,
                 forespørselTillatt = true,
                 oppslagUtførtTid = ZonedDateTime.of(2023, 8, 28, 10, 21, 29, 865897389, ZoneOffset.UTC).toInstant(),
-                beskrivelse = "Oppslag på korreksjoner",
-                requestUrl = URI.create("/api/saksbehandler/korreksjon/01H8XVHYJWKBX71R87VDT80GGQ"),
-                requestMethod = "GET",
+                beskrivelse = "Henter alle sykepengesoknader",
+                requestUrl = URI.create("/api/flex/sykepengesoknader"),
+                requestMethod = "POST",
             )
 
         auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)

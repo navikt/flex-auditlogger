@@ -9,7 +9,6 @@ import java.time.Instant
  * @param beskrivelse Beskrivelse av hva som er gjort, bør være "menneskelig lesbar"
  */
 data class AuditEntry(
-    val fagsystem: String,
     val appNavn: String,
     val utførtAv: String,
     val oppslagPå: String,
@@ -20,6 +19,8 @@ data class AuditEntry(
     val requestUrl: URI,
     val requestMethod: String,
 ) {
+    private val fagsystem = "Vedtaksløsning for sykepenger"
+
     fun tilCEFFormat(): String {
         return "CEF:0|${this.fagsystem}|${this.appNavn}|1.0|${eventType.logString}|" +
             "Sporingslogg|INFO|flexString1=${if (this.forespørselTillatt) "Permit" else "Deny"} " +
