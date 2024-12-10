@@ -13,8 +13,8 @@ import org.springframework.boot.test.autoconfigure.actuate.observability.AutoCon
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
-import org.testcontainers.containers.KafkaContainer
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
+import org.testcontainers.kafka.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import java.net.URI
 import java.time.Instant
@@ -28,7 +28,7 @@ class AuditHendelseConsumerTest {
     @Autowired
     private lateinit var redusertVenteperiodeConsumer: AuditHendelseConsumer
 
-    @SpyBean
+    @MockitoSpyBean
     private lateinit var auditLogger: Logger
 
     private val auditEntry =
@@ -46,7 +46,7 @@ class AuditHendelseConsumerTest {
 
     companion object {
         init {
-            KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1")).apply {
+            KafkaContainer(DockerImageName.parse("apache/kafka-native")).apply {
                 start()
                 System.setProperty("KAFKA_BROKERS", bootstrapServers)
             }

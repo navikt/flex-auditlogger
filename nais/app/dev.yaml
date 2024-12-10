@@ -1,7 +1,7 @@
 kafkaPool: nav-dev
 environment: dev
-cpu: 300m
-memory: 400Mi
+cpu: 50m
+memory: 384Mi
 replicas_min: 1
 replicas_max: 1
 env:
