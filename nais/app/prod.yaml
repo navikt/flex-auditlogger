@@ -1,7 +1,7 @@
 kafkaPool: nav-prod
 environment: prod
 cpu: 50m
-memory: 384Mi
+memory: 512Mi
 replicas_min: 1
 replicas_max: 2
 env:
