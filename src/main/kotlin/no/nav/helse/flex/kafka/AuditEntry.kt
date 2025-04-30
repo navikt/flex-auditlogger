@@ -21,16 +21,17 @@ data class AuditEntry(
 ) {
     private val fagsystem = "Vedtaksløsning for sykepenger"
 
-    fun tilCEFFormat(): String {
-        return "CEF:0|${this.fagsystem}|${this.appNavn}|1.0|${eventType.logString}|" +
+    fun tilCEFFormat(): String =
+        "CEF:0|${this.fagsystem}|${this.appNavn}|1.0|${eventType.logString}|" +
             "Sporingslogg|INFO|flexString1=${if (this.forespørselTillatt) "Permit" else "Deny"} " +
             "msg=${this.beskrivelse} request=${this.requestUrl} suid=${this.utførtAv} " +
             "duid=${this.oppslagPå} requestMethod=${this.requestMethod} flexString1Label=Decision " +
             "end=${this.oppslagUtførtTid.toEpochMilli()}"
-    }
 }
 
-enum class EventType(val logString: String) {
+enum class EventType(
+    val logString: String,
+) {
     CREATE("audit:create"),
     READ("audit:access"),
     UPDATE("audit:update"),
