@@ -46,7 +46,7 @@ class AuditHendelseConsumerTest {
 
     companion object {
         init {
-            KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.1")).apply {
+            KafkaContainer(DockerImageName.parse("apache/kafka-native:4.0.0")).apply {
                 start()
                 System.setProperty("KAFKA_BROKERS", bootstrapServers)
             }
