@@ -52,7 +52,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("ch.qos.logback:logback-classic:1.5.18")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.10")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
     testImplementation("org.testcontainers:kafka")
     testImplementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
