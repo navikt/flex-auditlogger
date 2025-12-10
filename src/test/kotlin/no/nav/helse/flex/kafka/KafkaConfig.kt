@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class KafkaConfig(
-    @Value("\${KAFKA_BROKERS}") private val kafkaBrokers: String,
+    @param:Value("\${KAFKA_BROKERS}") private val kafkaBrokers: String,
 ) {
     val log = logger()
 
