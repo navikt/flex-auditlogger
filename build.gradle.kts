@@ -31,7 +31,7 @@ repositories {
 val jacksonVersion = "2.20.1"
 val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
 val kluentVersion = "1.73"
-val testContainersVersion = "1.21.3"
+val testContainersVersion = "2.0.2"
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -42,7 +42,6 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.papertrailapp:logback-syslog4j:1.0.0")
 
-    // spring
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -51,11 +50,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
+    testImplementation("org.testcontainers:testcontainers-kafka:$testContainersVersion")
     testImplementation("ch.qos.logback:logback-classic:1.5.21")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.21")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
-    testImplementation("org.testcontainers:kafka")
-    testImplementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
 }
 
 ktlint {
