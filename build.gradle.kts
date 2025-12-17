@@ -53,7 +53,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:testcontainers-kafka:$testContainersVersion")
     testImplementation("ch.qos.logback:logback-classic:1.5.21")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.21")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.3.0")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
 }
 
