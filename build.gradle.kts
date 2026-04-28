@@ -52,7 +52,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:testcontainers-kafka:$testContainersVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.3.20")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.3.21")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
 }
 
