@@ -26,7 +26,7 @@ import java.time.Instant
 @AutoConfigureObservability
 class AuditHendelseConsumerTest {
     @Autowired
-    private lateinit var redusertVenteperiodeConsumer: AuditHendelseConsumer
+    private lateinit var auditHendelseConsumer: AuditHendelseConsumer
 
     @MockitoSpyBean
     private lateinit var auditLogger: Logger
@@ -56,7 +56,7 @@ class AuditHendelseConsumerTest {
     @Test
     @Order(1)
     fun `Prosesserer auditEntry fra kafka`() {
-        redusertVenteperiodeConsumer.prosesserKafkaMelding(
+        auditHendelseConsumer.prosesserKafkaMelding(
             auditEntry.serialisertTilString(),
         )
 
