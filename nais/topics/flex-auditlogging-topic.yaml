@@ -30,3 +30,6 @@ spec:
     - team: flex
       application: flex-sykmeldinger-backend
       access: write
+    - team: flex
+      application: spinnsyn-backend
+      access: write
