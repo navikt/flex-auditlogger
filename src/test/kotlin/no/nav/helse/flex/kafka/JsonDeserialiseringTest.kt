@@ -1,12 +1,12 @@
 package no.nav.helse.flex.kafka
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.helse.flex.utils.objectMapper
 import no.nav.helse.flex.utils.vaskFnr
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should contain`
 import org.amshove.kluent.`should not contain`
 import org.junit.jupiter.api.Test
+import tools.jackson.module.kotlin.readValue
 import java.net.URI
 import java.time.Instant
 import java.time.ZoneOffset

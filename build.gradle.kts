@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.springframework.boot") version "3.5.16"
+    id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     kotlin("jvm") version "2.4.10"
@@ -13,8 +13,6 @@ group = "no.nav.helse.flex"
 version = "1"
 description = "flex-auditlogging"
 java.sourceCompatibility = JavaVersion.VERSION_21
-
-ext["okhttp3.version"] = "4.12" // Token-support tester trenger MockWebServer.
 
 repositories {
     mavenCentral()
@@ -28,36 +26,31 @@ repositories {
     }
 }
 
-val jacksonVersion = "2.22.1"
 val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
 val kluentVersion = "1.73"
 val testContainersVersion = "2.0.5"
+val mockWebServerVersion = "5.5.0"
+val logstashLogbackEncoderVersion = "9.0"
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation(kotlin("stdlib"))
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("com.papertrailapp:logback-syslog4j:1.0.0")
 
-    implementation("org.springframework.kafka:spring-kafka")
-    implementation("org.springframework.boot:spring-boot-starter-logging")
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-kafka")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.hibernate.validator:hibernate-validator")
+    implementation("tools.jackson.module:jackson-module-kotlin")
+    implementation("com.papertrailapp:logback-syslog4j:1.0.0")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-micrometer-metrics-test")
+    testImplementation("org.springframework.boot:spring-boot-micrometer-tracing-test")
+    testImplementation("com.squareup.okhttp3:mockwebserver3:$mockWebServerVersion")
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:testcontainers-kafka:$testContainersVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.4.20")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
-}
-
-ktlint {
-    version.set("1.5.0")
 }
 
 kotlin {
