@@ -5,14 +5,19 @@ package no.nav.helse.flex.kafka
 import no.nav.helse.flex.Application
 import no.nav.helse.flex.utils.serialisertTilString
 import org.amshove.kluent.`should contain`
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestMethodOrder
 import org.mockito.Mockito.verify
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint
+import org.springframework.boot.micrometer.metrics.test.autoconfigure.AutoConfigureMetrics
+import org.springframework.boot.micrometer.tracing.test.autoconfigure.AutoConfigureTracing
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
+import org.springframework.boot.webmvc.test.autoconfigure.MockMvcPrint
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import org.testcontainers.kafka.KafkaContainer
 import org.testcontainers.utility.DockerImageName
@@ -23,7 +28,8 @@ import java.time.Instant
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @SpringBootTest(classes = [Application::class, KafkaConfig::class])
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE, printOnlyOnFailure = false)
-@AutoConfigureObservability
+@AutoConfigureTracing
+@AutoConfigureMetrics
 class AuditHendelseConsumerTest {
     @Autowired
     private lateinit var auditHendelseConsumer: AuditHendelseConsumer
