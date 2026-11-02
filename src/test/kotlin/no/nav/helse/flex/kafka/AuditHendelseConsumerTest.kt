@@ -2,9 +2,9 @@
 
 package no.nav.helse.flex.kafka
 
+import io.kotest.matchers.string.shouldContain
 import no.nav.helse.flex.Application
 import no.nav.helse.flex.utils.serialisertTilString
-import org.amshove.kluent.`should contain`
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -70,7 +70,7 @@ class AuditHendelseConsumerTest {
         val cefMessage = auditEntry.tilCEFFormat()
 
         verify(auditLogger).info(cefMessage)
-        cefMessage `should contain`
+        cefMessage shouldContain
             "CEF:0|Vedtaksløsning for sykepenger|flex-internal|1.0|audit:access|Sporingslogg|INFO|flexString1=Permit msg=Henter alle sykepengesoknader request=/api/flex/sykepengesoknader suid=12345678910 duid=10987654321 requestMethod=POST flexString1Label=Decision"
     }
 }
