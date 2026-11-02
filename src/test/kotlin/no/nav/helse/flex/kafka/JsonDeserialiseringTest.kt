@@ -1,10 +1,10 @@
 package no.nav.helse.flex.kafka
 
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import no.nav.helse.flex.utils.objectMapper
 import no.nav.helse.flex.utils.vaskFnr
-import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should contain`
-import org.amshove.kluent.`should not contain`
 import org.junit.jupiter.api.Test
 import tools.jackson.module.kotlin.readValue
 import java.net.URI
@@ -41,7 +41,7 @@ class JsonDeserialiseringTest {
                 requestMethod = "POST",
             )
 
-        auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry shouldBe objectMapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
@@ -72,13 +72,13 @@ class JsonDeserialiseringTest {
                 requestMethod = "POST",
             )
 
-        auditEntry `should be equal to` objectMapper.readValue<AuditEntry>(jsonMelding)
+        auditEntry shouldBe objectMapper.readValue<AuditEntry>(jsonMelding)
     }
 
     @Test
     fun `test vask av fnr i feilmeldinger`() {
         val feilmeldingMedFnr = "Det gikk galt et sted med fnr: 16120101181"
-        vaskFnr(feilmeldingMedFnr) `should not contain` feilmeldingMedFnr
-        vaskFnr(feilmeldingMedFnr) `should contain` "[fnr]"
+        vaskFnr(feilmeldingMedFnr) shouldNotContain feilmeldingMedFnr
+        vaskFnr(feilmeldingMedFnr) shouldContain "[fnr]"
     }
 }

@@ -27,7 +27,7 @@ repositories {
 }
 
 val auditLogVersion = "3.2023.09.13_04.55-a8ff452fbd94"
-val kluentVersion = "1.73"
+val kotestVersion = "6.2.6"
 val testContainersVersion = "2.0.5"
 val mockWebServerVersion = "5.5.1"
 val logstashLogbackEncoderVersion = "9.0"
@@ -50,7 +50,7 @@ dependencies {
     testImplementation("com.squareup.okhttp3:mockwebserver3:$mockWebServerVersion")
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:testcontainers-kafka:$testContainersVersion")
-    testImplementation("org.amshove.kluent:kluent:$kluentVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
 
 kotlin {
